@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown"
 import axios from "axios"
 
 const apiUrl = import.meta.env.VITE_API_URL;
-console.log(apiUrl)
+
 
 function Chatbot() {
   const vantaRef = useRef(null);
