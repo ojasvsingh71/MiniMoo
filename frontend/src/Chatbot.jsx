@@ -58,12 +58,22 @@ function Chatbot() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${apiUrl}/chat`, { prompt: input });
-      const botMessage = { role: 'bot', text: res.data.reply };
+      const res = await axios.post(`${apiUrl}/chat`, {
+        messages: [
+          ...messages.map(msg => ({
+            role: msg.role === "user" ? "user" : "assistant",
+            content: msg.text
+          })),
+          { role: "user", content: input }
+        ]
+      }
+
+      );
+      const botMessage = { role: 'assistent', text: res.data.reply };
       setMessages(prev => [...prev, botMessage]);
     } catch (err) {
       console.log(err);
-      setMessages(prev => [...prev, { role: 'bot', text: 'Oops! Something went wrong' }]);
+      setMessages(prev => [...prev, { role: 'assistent', text: 'Oops! Something went wrong' }]);
     } finally {
       setLoading(false);
     }
@@ -86,10 +96,10 @@ function Chatbot() {
               <div
                 key={index}
                 className={`text-white p-2 px-4 my-2 rounded-xl max-w-full w-fit break-words whitespace-pre-wrap 
-                  ${msg.role === 'bot' ? 'bg-[#103e84] self-start text-left mr-auto' : 'bg-white/30 self-end text-right ml-auto'}
+                  ${msg.role === 'assistent' ? 'bg-[#103e84] self-start text-left mr-auto' : 'bg-white/30 self-end text-right ml-auto'}
                   `}
               >
-                {msg.role === 'bot' ? (
+                {msg.role === 'assistent' ? (
                   <ReactMarkdown>{msg.text}</ReactMarkdown>
                 ) : (msg.text)}
 
